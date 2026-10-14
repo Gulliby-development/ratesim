@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Ratesim.Core/Ratesim.Core.csproj" />
+    <Project Path="src/Ratesim/Ratesim.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Ratesim.Tests/Ratesim.Tests.csproj" />
+  </Folder>
+</Solution>
