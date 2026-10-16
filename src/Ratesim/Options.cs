@@ -15,6 +15,8 @@ public sealed class Options
 
     public List<string> Policies { get; } = new();
 
+    public string? Only { get; private set; }
+
     public bool SharedScope { get; private set; }
 
     public string? Kind { get; private set; }
@@ -104,6 +106,8 @@ public sealed class Options
     {
         switch (name)
         {
+            case "--only":
+                return command == "explain";
             case "--scope":
                 return true;
             case "--policy":
@@ -170,6 +174,14 @@ public sealed class Options
                 }
 
                 Policies.Add(value);
+                break;
+            case "--only":
+                if (value != "allowed" && value != "denied")
+                {
+                    throw new RatesimException($"invalid --only \"{value}\" (expected allowed or denied)");
+                }
+
+                Only = value;
                 break;
             case "--scope":
                 if (value != "key" && value != "all")

@@ -7,7 +7,7 @@ public static class Cli
 {
     private const string Usage =
         "usage: ratesim run --policy SPEC [--policy SPEC]... [--max-denied PERCENT] [--scope key|all] LOG\n"
-        + "       ratesim explain --policy SPEC [--scope key|all] LOG\n"
+        + "       ratesim explain --policy SPEC [--only allowed|denied] [--scope key|all] LOG\n"
         + "       ratesim suggest --kind fixed|sliding --window DURATION [--max-denied PERCENT] [--scope key|all] LOG\n";
 
     public static int Run(string[] args, TextReader stdin, TextWriter stdout, TextWriter stderr)
@@ -52,7 +52,7 @@ public static class Cli
         }
         else if (options.Command == "explain")
         {
-            text = Report.ExplainText(Simulator.Explain(requests, Build(options.Policies[0]), options.SharedScope));
+            text = Report.ExplainText(Simulator.Explain(requests, Build(options.Policies[0]), options.SharedScope), options.Only);
         }
         else
         {

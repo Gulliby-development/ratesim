@@ -55,6 +55,11 @@ public static class Report
 
     public static string ExplainText(IReadOnlyList<ExplainEntry> entries)
     {
+        return ExplainText(entries, null);
+    }
+
+    public static string ExplainText(IReadOnlyList<ExplainEntry> entries, string? only)
+    {
         var sb = new StringBuilder();
         int allowed = 0;
         int denied = 0;
@@ -68,6 +73,11 @@ public static class Report
             else
             {
                 denied++;
+            }
+
+            if (only is not null && ((only == "allowed") != entry.Decision.Allowed))
+            {
+                continue;
             }
 
             sb.Append(Num(request.Line)).Append(' ').Append(request.TimeText).Append(' ').Append(request.Key)

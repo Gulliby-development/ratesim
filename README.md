@@ -24,7 +24,7 @@ dotnet run --project src/Ratesim -- ARGS
 
 ```
 usage: ratesim run --policy SPEC [--policy SPEC]... [--max-denied PERCENT] [--scope key|all] LOG
-       ratesim explain --policy SPEC [--scope key|all] LOG
+       ratesim explain --policy SPEC [--only allowed|denied] [--scope key|all] LOG
        ratesim suggest --kind fixed|sliding --window DURATION [--max-denied PERCENT] [--scope key|all] LOG
 ```
 
@@ -69,6 +69,18 @@ bucket:1/5s,2        6       4    40.0%
 11 2024-05-01T10:00:12.000Z bob denied (cost 3 exceeds burst 2)
 6 allowed, 4 denied
 ```
+
+`ratesim explain --only denied --policy bucket:1/5s,2 api.log` prints only the denied requests; the last line still counts every request:
+
+```
+5 2024-05-01T10:00:02.000Z alice denied (tokens left: 0)
+8 2024-05-01T10:00:10.200Z alice denied (tokens left: 0)
+10 2024-05-01T10:00:11.000Z alice denied (tokens left: 0)
+11 2024-05-01T10:00:12.000Z bob denied (cost 3 exceeds burst 2)
+6 allowed, 4 denied
+```
+
+`--only allowed` prints only the allowed requests. Only `explain` takes `--only`.
 
 `ratesim suggest --kind fixed --window 10s api.log` prints
 
