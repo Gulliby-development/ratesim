@@ -22,7 +22,7 @@ public class DocsTests
     {
         var expected = Lines(
             "usage: ratesim run --policy SPEC [--policy SPEC]... [--max-denied PERCENT] [--scope key|all] LOG",
-            "       ratesim explain --policy SPEC [--scope key|all] LOG",
+            "       ratesim explain --policy SPEC [--only allowed|denied] [--scope key|all] LOG",
             "       ratesim suggest --kind fixed|sliding --window DURATION [--max-denied PERCENT] [--scope key|all] LOG");
         Assert.Contains(expected, ReadReadme());
     }

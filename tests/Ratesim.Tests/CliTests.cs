@@ -70,7 +70,7 @@ public class CliTests
         Assert.Equal(string.Empty, error);
         Assert.Equal(
             "usage: ratesim run --policy SPEC [--policy SPEC]... [--max-denied PERCENT] [--scope key|all] LOG\n"
-            + "       ratesim explain --policy SPEC [--scope key|all] LOG\n"
+            + "       ratesim explain --policy SPEC [--only allowed|denied] [--scope key|all] LOG\n"
             + "       ratesim suggest --kind fixed|sliding --window DURATION [--max-denied PERCENT] [--scope key|all] LOG\n",
             output);
     }
