@@ -55,12 +55,19 @@ public sealed class Options
         }
 
         var options = new Options(command);
+        bool optionsEnded = false;
         for (int i = 1; i < args.Length; i++)
         {
             string arg = args[i];
+
+            if (!optionsEnded && arg == "--")
+            {
+                optionsEnded = true;
+                continue;
+            }
             string name = arg;
             string? value = null;
-            if (arg.StartsWith("--", StringComparison.Ordinal))
+            if (!optionsEnded && arg.StartsWith("--", StringComparison.Ordinal))
             {
                 int eq = arg.IndexOf('=');
                 if (eq >= 0)
@@ -70,7 +77,7 @@ public sealed class Options
                 }
             }
 
-            if (TakesValue(command, name))
+            if (!optionsEnded && TakesValue(command, name))
             {
                 if (value is null)
                 {
@@ -84,7 +91,7 @@ public sealed class Options
 
                 options.Apply(name, value);
             }
-            else if (arg.StartsWith('-') && arg != "-")
+            else if (!optionsEnded && arg.StartsWith('-') && arg != "-")
             {
                 throw new RatesimException($"unknown option \"{arg}\"");
             }

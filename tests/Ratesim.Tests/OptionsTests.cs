@@ -171,4 +171,33 @@ public class OptionsTests
     {
         Assert.Equal("unknown option \"--verbose\"", Fail("run --verbose"));
     }
+    [Theory]
+    [InlineData("run --policy fixed:1/1s -- -a.log", "-a.log")]
+    [InlineData("run --policy fixed:1/1s -- --help", "--help")]
+    [InlineData("run --policy fixed:1/1s -- --policy=fixed:2/1s", "--policy=fixed:2/1s")]
+    public void ParseTreatsArgumentsAfterOptionsEndAsLog(string args, string log)
+    {
+        var options = Options.Parse(Split(args));
+        Assert.Equal(log, options.Log);
+        Assert.Equal(new[] { "fixed:1/1s" }, options.Policies);
+    }
+
+    [Theory]
+    [InlineData("run --policy fixed:1/1s --", "missing LOG")]
+    [InlineData("run --policy fixed:1/1s -- a.log b.log", "too many arguments")]
+    [InlineData("run --policy fixed:1/1s a.log -- b.log", "too many arguments")]
+    [InlineData("run --policy fixed:1/1s -- -- a.log", "too many arguments")]
+    [InlineData("run --policy -- a.log", "invalid policy \"--\" " + PolicyHelp)]
+    [InlineData("-- run", "unknown command \"--\"")]
+    public void ParseReportsOptionsEndErrors(string args, string message)
+    {
+        Assert.Equal(message, Fail(args));
+    }
+
+    [Fact]
+    public void SecondOptionsTerminatorIsLog()
+    {
+        var options = Options.Parse(Split("run --policy fixed:1/1s -- --"));
+        Assert.Equal("--", options.Log);
+    }
 }
