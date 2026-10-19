@@ -28,7 +28,7 @@ usage: ratesim run --policy SPEC [--policy SPEC]... [--max-denied PERCENT] [--sc
        ratesim suggest --kind fixed|sliding --window DURATION [--max-denied PERCENT] [--scope key|all] LOG
 ```
 
-LOG is a path or `-` (standard input). The examples below use this `api.log`:
+LOG is a path or `-` (standard input). After a lone `--` the next argument is the LOG even when it starts with `-` (`ratesim run --policy fixed:3/10s -- -api.log`). The examples below use this `api.log`:
 
 ```
 # api gateway sample
