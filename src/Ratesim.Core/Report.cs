@@ -53,6 +53,27 @@ public static class Report
         return sb.ToString();
     }
 
+    public static string RunCsv(IReadOnlyList<PolicyResult> results)
+    {
+        var sb = new StringBuilder("policy,allowed,denied,denied_percent\n");
+        foreach (PolicyResult result in results)
+        {
+            string percent = Percent(result.Denied, result.Allowed + result.Denied);
+            sb.Append(CsvField(result.Spec))
+                .Append(',').Append(Num(result.Allowed))
+                .Append(',').Append(Num(result.Denied))
+                .Append(',').Append(percent, 0, percent.Length - 1)
+                .Append('\n');
+        }
+
+        return sb.ToString();
+    }
+
+    private static string CsvField(string text)
+    {
+        return text.IndexOfAny(new[] { ',', '"' }) < 0 ? text : "\"" + text.Replace("\"", "\"\"") + "\"";
+    }
+
     public static string ExplainText(IReadOnlyList<ExplainEntry> entries)
     {
         return ExplainText(entries, null);

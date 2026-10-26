@@ -31,6 +31,8 @@ public sealed class Options
 
     public string? Log { get; private set; }
 
+    public bool Csv { get; private set; }
+
     public static Options Parse(string[] args)
     {
         if (args.Length == 0)
@@ -117,6 +119,8 @@ public sealed class Options
                 return command == "explain";
             case "--scope":
                 return true;
+            case "--format":
+                return command == "run";
             case "--policy":
                 return command != "suggest";
             case "--max-denied":
@@ -197,6 +201,14 @@ public sealed class Options
                 }
 
                 SharedScope = value == "all";
+                break;
+            case "--format":
+                if (value != "text" && value != "csv")
+                {
+                    throw new RatesimException($"invalid --format \"{value}\" (expected text or csv)");
+                }
+
+                Csv = value == "csv";
                 break;
             case "--kind":
                 if (value != "fixed" && value != "sliding")
