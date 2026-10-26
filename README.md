@@ -23,7 +23,7 @@ dotnet run --project src/Ratesim -- ARGS
 ## Usage
 
 ```
-usage: ratesim run --policy SPEC [--policy SPEC]... [--max-denied PERCENT] [--scope key|all] LOG
+usage: ratesim run --policy SPEC [--policy SPEC]... [--max-denied PERCENT] [--scope key|all] [--format text|csv] LOG
        ratesim explain --policy SPEC [--only allowed|denied] [--scope key|all] LOG
        ratesim suggest --kind fixed|sliding --window DURATION [--max-denied PERCENT] [--scope key|all] LOG
 ```
@@ -52,6 +52,14 @@ policy         allowed  denied  denied%
 fixed:3/10s          8       2    20.0%
 sliding:3/10s        7       3    30.0%
 bucket:1/5s,2        6       4    40.0%
+```
+
+With `--format csv`, `run` prints one comma-separated row per policy instead of the table, under the header `policy,allowed,denied,denied_percent`. The request and key counts are left out, the percentage has no `%` sign, and a policy that holds a comma is written in double quotes. `--format text` is the default, only `run` accepts `--format`, and the exit code still follows `--max-denied`. `ratesim run --policy fixed:3/10s --policy bucket:1/5s,2 --format csv api.log` prints
+
+```
+policy,allowed,denied,denied_percent
+fixed:3/10s,8,2,20.0
+"bucket:1/5s,2",6,4,40.0
 ```
 
 `ratesim explain --policy bucket:1/5s,2 api.log` prints
