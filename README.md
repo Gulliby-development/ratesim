@@ -23,7 +23,7 @@ dotnet run --project src/Ratesim -- ARGS
 ## Usage
 
 ```
-usage: ratesim run --policy SPEC [--policy SPEC]... [--max-denied PERCENT] [--scope key|all] [--format text|csv] LOG
+usage: ratesim run --policy SPEC [--policy SPEC]... [--max-denied PERCENT] [--scope key|all] [--format text|csv] [--sort input|policy|allowed|denied] LOG
        ratesim explain --policy SPEC [--only allowed|denied] [--scope key|all] LOG
        ratesim suggest --kind fixed|sliding --window DURATION [--max-denied PERCENT] [--scope key|all] LOG
 ```
@@ -60,6 +60,16 @@ With `--format csv`, `run` prints one comma-separated row per policy instead of 
 policy,allowed,denied,denied_percent
 fixed:3/10s,8,2,20.0
 "bucket:1/5s,2",6,4,40.0
+```
+
+`--sort` orders the policies of `run` (both formats): `input` keeps the order of the command line and is the default, `policy` sorts by the policy text in ordinal order, `allowed` puts the most allowed requests first and `denied` the fewest denied requests first. Policies that tie keep their command-line order. Only `run` accepts `--sort`, the last one wins, and the exit code does not depend on it. `ratesim run --policy bucket:1/5s,2 --policy fixed:3/10s --policy sliding:3/10s --sort denied api.log` prints
+
+```
+10 requests from 2 keys
+policy         allowed  denied  denied%
+fixed:3/10s          8       2    20.0%
+sliding:3/10s        7       3    30.0%
+bucket:1/5s,2        6       4    40.0%
 ```
 
 `ratesim explain --policy bucket:1/5s,2 api.log` prints
