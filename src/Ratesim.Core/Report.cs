@@ -53,6 +53,18 @@ public static class Report
         return sb.ToString();
     }
 
+    public static IReadOnlyList<PolicyResult> Sorted(IReadOnlyList<PolicyResult> results, string sort)
+    {
+        IEnumerable<PolicyResult> ordered = sort switch
+        {
+            "policy" => results.OrderBy(result => result.Spec, StringComparer.Ordinal),
+            "allowed" => results.OrderByDescending(result => result.Allowed),
+            "denied" => results.OrderBy(result => result.Denied),
+            _ => results,
+        };
+        return ordered.ToList();
+    }
+
     public static string RunCsv(IReadOnlyList<PolicyResult> results)
     {
         var sb = new StringBuilder("policy,allowed,denied,denied_percent\n");

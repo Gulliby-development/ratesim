@@ -6,7 +6,7 @@ namespace Ratesim;
 public static class Cli
 {
     private const string Usage =
-        "usage: ratesim run --policy SPEC [--policy SPEC]... [--max-denied PERCENT] [--scope key|all] [--format text|csv] LOG\n"
+        "usage: ratesim run --policy SPEC [--policy SPEC]... [--max-denied PERCENT] [--scope key|all] [--format text|csv] [--sort input|policy|allowed|denied] LOG\n"
         + "       ratesim explain --policy SPEC [--only allowed|denied] [--scope key|all] LOG\n"
         + "       ratesim suggest --kind fixed|sliding --window DURATION [--max-denied PERCENT] [--scope key|all] LOG\n";
 
@@ -48,6 +48,7 @@ public static class Cli
                 }
             }
 
+            results = Report.Sorted(results, options.Sort).ToList();
             text = options.Csv
                 ? Report.RunCsv(results)
                 : Report.RunText(requests.Count, Simulator.CountKeys(requests), results);

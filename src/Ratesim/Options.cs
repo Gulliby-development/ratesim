@@ -33,6 +33,8 @@ public sealed class Options
 
     public bool Csv { get; private set; }
 
+    public string Sort { get; private set; } = "input";
+
     public static Options Parse(string[] args)
     {
         if (args.Length == 0)
@@ -120,6 +122,7 @@ public sealed class Options
             case "--scope":
                 return true;
             case "--format":
+            case "--sort":
                 return command == "run";
             case "--policy":
                 return command != "suggest";
@@ -209,6 +212,14 @@ public sealed class Options
                 }
 
                 Csv = value == "csv";
+                break;
+            case "--sort":
+                if (value != "input" && value != "policy" && value != "allowed" && value != "denied")
+                {
+                    throw new RatesimException($"invalid --sort \"{value}\" (expected input, policy, allowed or denied)");
+                }
+
+                Sort = value;
                 break;
             case "--kind":
                 if (value != "fixed" && value != "sliding")

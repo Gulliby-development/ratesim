@@ -21,7 +21,7 @@ public class DocsTests
     public void ContainsUsageLines()
     {
         var expected = Lines(
-            "usage: ratesim run --policy SPEC [--policy SPEC]... [--max-denied PERCENT] [--scope key|all] [--format text|csv] LOG",
+            "usage: ratesim run --policy SPEC [--policy SPEC]... [--max-denied PERCENT] [--scope key|all] [--format text|csv] [--sort input|policy|allowed|denied] LOG",
             "       ratesim explain --policy SPEC [--only allowed|denied] [--scope key|all] LOG",
             "       ratesim suggest --kind fixed|sliding --window DURATION [--max-denied PERCENT] [--scope key|all] LOG");
         Assert.Contains(expected, ReadReadme());
